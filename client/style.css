@@ -8,42 +8,143 @@
   width: 100vw;
   height: 100vh;
   position: relative;
-  
+  background-color: #333;
   display: flex;
-  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
-.left {
-  flex: 1;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+.table {
+  background-color: #003465;
+  width: 100vh;
+  height: 100vh;
+  position: relative;
 }
-.player {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 2px solid #000;
+
+.handcards {
+  position: absolute;
+  border: 1px solid #fff;
 }
-.player .btn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100px;
-  height: 50px;
+#handcards1 { width: 85vh; height: 15vh; bottom: 0; right: 0;}
+#handcards2 { width: 15vh; height: 85vh; top: 0; right: 0;}
+#handcards3 { width: 15vh; height: 85vh; bottom: 0; left: 0;}
+#handcards4 { width: 85vh; height: 15vh; top: 0; left: 0;}
+
+.card {
+  width: 5vh;
+  height: 7.5vh;
+  border-radius: 3px;
+  z-index: 10;
+  position: relative;
+  background-color:#fa9c3e;
+}
+.card::before{
+  content:'';
+  border-radius: 3px;
+  width:100%;height:100%;position:absolute;bottom:-2px;
+  background-color:#b0b0b5;
+  z-index: 9;
+}
+.card::after{
+  content:'';
+  border-radius: 3px;
+  width:100%;height:100%;position:absolute;bottom:-4px;
+  background-color:#fff;
+  background-image: url('static/m1.gif');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  z-index: 11;
+}
+#handcards1 .cards1 {
+  position: absolute;
+  width: 80vh;
+  height: 7.5vh;
+  left: 3vh;
+  top: 3.75vh;
+}
+#handcards1 .cards2 {
+  position: absolute;
+  width: 50vh;
+  height: 9vh;
+  right: 1vh;
+  bottom: 1vh;
+}
+#handcards1 .cards1 .card {
+  float: left;
+  margin-right: 2px;
+}
+#handcards1 .cards2 .card {
+  float: right;
+  margin-left: 2px;
+}
+.cardHor {
+  /* transform: rotate(90deg); */
+}
+.cardHor::before {
+  content: "";
+  width: 9vh;
+  height: 6vh;
+  padding: 100%;
+}
+
+.outputcards {
+  position: absolute;
+  border: 1px dotted #fff;
+}
+#outputcards1 { width: 30vh; height: 20vh; bottom: 15vh; right: 35vh;}
+#outputcards2 { width: 20vh; height: 30vh; top: 35vh; right: 15vh;}
+#outputcards3 { width: 20vh; height: 30vh; bottom: 35vh; left: 15vh;}
+#outputcards4 { width: 30vh; height: 20vh; top: 15vh; left: 35vh;}
+
+.center {
+  position: absolute;
+  width: 20vh;
+  height: 20vh;
   border: 1px solid #000;
-  cursor: pointer;
+  left: 40vh;
+  top: 40vh;
+  color: #fff;
 }
-.right {
-  flex: 2;
-  background-color: bisque;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+
+.count {
+  position: absolute;
+  width: 10vh;
+  height: 10vh;
+  line-height: 10vh;
+  text-align: center;
+  border: 1px solid #fff;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
 }
-.right #msg {
-  width: 99%;
-  height: 99%;
-  resize: none;
+
+.scores {
+  position: absolute;
+  text-align: center;
+  width: 10vh;
+  height: 5vh;
+  line-height: 5vh;
+}
+
+#scores1 { left: 5vh; bottom: 0;}
+#scores2 { left: 12.5vh; bottom: 7.5vh; transform: rotate(-90deg);}
+#scores3 { left: 5vh; top: 0;}
+#scores4 { left: -2.5vh; bottom: 7.5vh; transform: rotate(90deg);}
+
+
+#scores1::before,
+#scores2::before,
+#scores3::before,
+#scores4::before {
+  content: '';
+  width: 8vh;
+  height: 1vh;
+  background-color: #fff;
+  position: absolute;
+  left: 1vh;
+  bottom: -1vh;
+}
+#scores3::before{
+  top: -1vh;
 }
