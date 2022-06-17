@@ -34,34 +34,48 @@
   width: 5vh;
   height: 7.5vh;
   border-radius: 3px;
-  z-index: 10;
   position: relative;
-  background-color:#fa9c3e;
-}
-.card::before{
-  content:'';
-  border-radius: 3px;
-  width:100%;height:100%;position:absolute;bottom:-2px;
-  background-color:#b0b0b5;
-  z-index: 9;
-}
-.card::after{
-  content:'';
-  border-radius: 3px;
-  width:100%;height:100%;position:absolute;bottom:-4px;
   background-color:#fff;
   background-image: url('static/m1.gif');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
-  z-index: 11;
+  background-color:#fa9c3e;
+  transform-style: preserve-3d;
 }
+.card::before{
+  content:'';
+  border-radius: 3px;
+  width:100%;height:100%;
+  position:absolute;top:-2px;
+  background-color:#b0b0b5;
+  transform: translateZ(-5px);
+}
+.card::after{
+  content:'';
+  border-radius: 3px;
+  width:100%;height:100%;
+  position:absolute;top:-4px;
+  background-color:#fa9c3e;
+  transform: translateZ(-10px);
+}
+
+.cards1 .card:hover {
+  transform: translateY(-10px);
+  cursor: pointer;
+}
+
+.cards1 .inputCard {
+  margin-left: 20px;
+}
+
 #handcards1 .cards1 {
   position: absolute;
   width: 80vh;
   height: 7.5vh;
-  left: 3vh;
+  left: 0;
   top: 3.75vh;
+  z-index: 20;
 }
 #handcards1 .cards2 {
   position: absolute;
@@ -69,10 +83,14 @@
   height: 9vh;
   right: 1vh;
   bottom: 1vh;
+  z-index: 19;
 }
 #handcards1 .cards1 .card {
   float: left;
   margin-right: 2px;
+}
+#handcards1 .cards1 .card:nth-last-child() {
+  border: 4px solid #00f;
 }
 #handcards1 .cards2 .card {
   float: right;
@@ -92,10 +110,18 @@
   position: absolute;
   border: 1px dotted #fff;
 }
-#outputcards1 { width: 30vh; height: 20vh; bottom: 15vh; right: 35vh;}
-#outputcards2 { width: 20vh; height: 30vh; top: 35vh; right: 15vh;}
-#outputcards3 { width: 20vh; height: 30vh; bottom: 35vh; left: 15vh;}
-#outputcards4 { width: 30vh; height: 20vh; top: 15vh; left: 35vh;}
+#outputcards1 { width: calc(30vh + 2px); height: 20vh; bottom: 15vh; right: 35vh;}
+#outputcards2 { width: 20vh; height: calc(30vh + 2px); top: 35vh; right: 15vh;}
+#outputcards3 { width: 20vh; height: calc(30vh + 2px); bottom: 35vh; left: 15vh;}
+#outputcards4 { width: calc(30vh + 2px); height: 20vh; top: 15vh; left: 35vh;}
+
+#outputcards1 .card{
+  float: left;
+  margin-right: 2px;
+  margin-bottom: 8px;
+  width: 4vh;
+  height: 6vh;
+}
 
 .center {
   position: absolute;
