@@ -1,5 +1,5 @@
 const WebSocket = require('ws');
-const wss = new WebSocket.Server({ port: 8080 });
+const wss = new WebSocket.Server({ port: 8082 });
 
 let players = [];
 let curPlayer = 0;
@@ -8,7 +8,7 @@ let curCard = 0;
 const allCards = [];
 const cardCount = 136;
 for(let i=0; i<cardCount; i++) {
-  allCards.push(i+1)
+  allCards.push(i)
 }
 allCards.sort(function() {
   return (0.5-Math.random());
@@ -26,7 +26,7 @@ function parseURL(url) {
   return dict;
 }
 
-wss.broadcast = function broadcast(flag,user,msg='') {
+wss.broadcast = function broadcast(flag,user,json='') {
   wss.clients.forEach(function each(client) {
     if(flag == 0){
       let flagExist = false;
@@ -42,8 +42,13 @@ wss.broadcast = function broadcast(flag,user,msg='') {
         user.inputCard = 0;
         user.online = 1;
         players.push(user);
+        client.send(user.name + "加入麻将室大厅");
+        if(players.length==4) {
+          setTimeout(() => {
+            startGame()
+          }, 2000);
+        }
       }
-      client.send(user.name + "加入麻将室大厅");
     }
     if(flag == 1){
       client.send(user.name + ":" + user.msg);	
@@ -52,28 +57,48 @@ wss.broadcast = function broadcast(flag,user,msg='') {
       client.send(user.name + "退出麻将室大厅");
     }
     if(flag == 3){
-      client.send(msg);
+      let userIndex = getUserIndex(client.userId)
+      client.send('当前手牌:'+players[userIndex].handCards);  
+      let fourOutputCards = [];
+      players.map(player => {
+        fourOutputCards.push({
+          name: player.name,
+          outputCards: player.outputCards
+        })
+      })
+      client.send('当前牌堆:'+JSON.stringify(fourOutputCards));
+      client.send('当前出牌:'+curPlayer);
+      if(userIndex==curPlayer) {
+        curCard = allCards.pop();
+        players[curPlayer].handCards.push(curCard);
+        client.send('你抓到了:'+curCard)
+      }
     }
   });
 };
 wss.on('connection', function connection(client, req) {
   let query = parseURL(req.url);
+  console.log(query);
   client.userId = query.name;
-  wss.broadcast(0,query);
+  client.roomId = query.room;
+  if(players.length==4) {
+    client.send("本房间已经满员");
+  } else {
+    wss.broadcast(0,query);
+    client.send('你的名字:'+query.name);
+  }
   client.on('message', function incoming(data) {
     if(data=='start') {
       startGame()
-    } else if(data.indexOf('card')!=-1) {
-      let card = parseInt(data.slice(4));
-      wss.broadcast(3,query.name+"出了一张"+card);
-      /* 
-       判断 吃、碰、杠、胡
-      */
-      let index = getUserIndex(user);
-      players[index].outputCards.push(card);
-      let cardIndex = getCardIndex(players[index].handCards,card);
-      players[index].handCards.splice(cardIndex,1);
-      players[index].handCards.sort(sequence);
+    } else if(data.indexOf('output')!=-1) {
+      let parseData = JSON.parse(data);
+      let cardIndex = getCardIndex(parseData.handCards,parseData.output);
+      let userIndex = getUserIndex(parseData.name);
+      let outputcard = players[userIndex].handCards.splice(cardIndex,1)[0];
+      players[userIndex].outputCards.push(outputcard);
+      players[userIndex].handCards.sort(sequence);
+      curPlayer = (curPlayer + 1)%4;
+      wss.broadcast(3,query);
     } else {
       query.msg = data;
       wss.broadcast(1,query);
@@ -97,7 +122,7 @@ function getUserIndex(user) {
 
 function getCardIndex(cards,card) {
   for(let i=0; i<cards.length; i++) {
-    if(players[i].name==user) {
+    if(cards[i]==card) {
       return i
     }
   }
@@ -110,6 +135,7 @@ function sequence(a,b){
 function startGame() {
   wss.clients.forEach(function each(client) {
     client.send('游戏开始');
+    client.send('所有玩家:'+JSON.stringify(players))
     let user = client.userId;
     let index = getUserIndex(user);
     if(players[index].name==user) {
@@ -118,11 +144,20 @@ function startGame() {
       }
     }
     players[index].handCards.sort(sequence);
-    client.send('你当前的手牌是:'+players[index].handCards+'\n当前正在出牌的玩家是:'+players[curPlayer].name);
+    client.send('当前手牌:'+players[index].handCards);
+    let fourOutputCards = [];
+    players.map(player => {
+      fourOutputCards.push({
+        name: player.name,
+        outputCards: player.outputCards
+      })
+    })
+    client.send('当前牌堆:'+JSON.stringify(fourOutputCards));
+    client.send('当前出牌:'+curPlayer);
     if(index==curPlayer) {
       curCard = allCards.pop();
       players[curPlayer].handCards.push(curCard);
-      client.send('你当前抓到的牌是:'+curCard)
+      client.send('你抓到了:'+curCard)
     }
   })
 }
