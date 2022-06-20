@@ -110,17 +110,17 @@
   position: absolute;
   border: 1px dotted #fff;
 }
-#outputcards1 { width: calc(30vh + 2px); height: 20vh; bottom: 15vh; right: 35vh;}
-#outputcards2 { width: 20vh; height: calc(30vh + 2px); top: 35vh; right: 15vh;}
-#outputcards3 { width: 20vh; height: calc(30vh + 2px); bottom: 35vh; left: 15vh;}
-#outputcards4 { width: calc(30vh + 2px); height: 20vh; top: 15vh; left: 35vh;}
+#outputcards1 { width: calc(30vh); height: 20vh; bottom: 15vh; right: 35vh;}
+#outputcards2 { width: 20vh; height: calc(30vh); top: 35vh; right: 15vh;}
+#outputcards3 { width: 20vh; height: calc(30vh); bottom: 35vh; left: 15vh;}
+#outputcards4 { width: calc(30vh); height: 20vh; top: 15vh; left: 35vh;}
 
 #outputcards1 .card{
   float: left;
   margin-right: 2px;
   margin-bottom: 8px;
-  width: 4vh;
-  height: 6vh;
+  width: 2.7vh;
+  height: 4.05vh;
 }
 
 .center {
@@ -173,4 +173,44 @@
 }
 #scores3::before{
   top: -1vh;
+}
+
+.options {
+  position: absolute;
+  width: 50vh;
+  height: 10vh;
+  right: 15vh;
+  bottom: 15vh;
+}
+.options .option {
+  float: right;
+  font-family: "华文行楷";
+  color: #fff;
+  width: 8vh;
+  height: 8vh;
+  margin-right: 2vh;
+  line-height: 8vh;
+  text-align: center;
+  font-size: 7vh;
+  border-radius: 50%;
+}
+.options .option:nth-child(5) {
+  background-color: #DC2626;
+  display: none;
+}
+.options .option:nth-child(4) {
+  background-color: #CA8A04;
+  display: none;
+}
+.options .option:nth-child(3) {
+  background-color: #CA8A04;
+  display: none;
+}
+.options .option:nth-child(2) {
+  background-color: #CA8A04;
+  display: none;
+}
+.options .option:nth-child(1) {
+  background-color: #71717A;
+  display: none;
 }
